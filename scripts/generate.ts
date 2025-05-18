@@ -1,7 +1,10 @@
 import fs from 'node:fs'
+import path from 'node:path'
 import fg from 'fast-glob'
 import matter from 'gray-matter'
 import { x } from 'tinyexec'
+
+const snippetsRoute = 'src/snippets'
 
 export function extractBlocks(md: string): { firstCode: string[], description: string } {
   const codeBlockRegex = /```[a-z]*\n([\s\S]*?)```/
@@ -28,7 +31,7 @@ export function extractBlocks(md: string): { firstCode: string[], description: s
 }
 
 async function main() {
-  const files = await fg('src/snippets/**/*.md')
+  const files = await fg(`${snippetsRoute}/**/*.md`)
   const snippets: Record<string, any> = {}
 
   const tableRows: string[] = []
@@ -54,8 +57,10 @@ async function main() {
       continue
     }
 
-    const baseName = file.split('/').pop()!.split('.')[0]
-    const snippetName = baseName[0].toUpperCase() + baseName.slice(1)
+    const relPath = path.relative(snippetsRoute, file)
+    const parts = relPath.split(path.sep)
+    const baseName = path.parse(parts.pop()!).name
+    const snippetName = [...parts, baseName].join('-')
 
     snippets[snippetName] = {
       prefix: prefixes,
