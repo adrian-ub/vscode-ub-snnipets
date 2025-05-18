@@ -1,0 +1,75 @@
+{
+  "publisher": "adrianub",
+  "name": "ub-snippets",
+  "displayName": "UB Snippets",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.6.5",
+  "description": "Personal snippets",
+  "funding": "https://github.com/sponsors/adrian-ub",
+  "homepage": "https://github.com/adrian-ub/vscode-ub-snippets#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adrian-ub/vscode-ub-snippets"
+  },
+  "bugs": {
+    "url": "https://github.com/adrian-ub/vscode-ub-snippets/issues"
+  },
+  "keywords": [
+    "javascript snippets",
+    "html snippets",
+    "typescript snippets"
+  ],
+  "categories": [
+    "Snippets"
+  ],
+  "icon": "res/icon.png",
+  "files": [
+    "LICENSE.md",
+    "dist/*",
+    "res/*"
+  ],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "path": "./dist/snippets.code-snippets"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "tsx scripts/generate.ts",
+    "publish": "vsce publish --no-dependencies",
+    "pack": "vsce package --no-dependencies",
+    "vscode:prepublish": "nr build",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "release": "bumpp && nr publish",
+    "test": "vitest",
+    "prepare": "simple-git-hooks"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.13.1",
+    "@antfu/ni": "^24.4.0",
+    "@types/node": "^22.15.2",
+    "@vscode/vsce": "^3.4.0",
+    "bumpp": "^10.1.1",
+    "eslint": "^9.26.0",
+    "eslint-plugin-format": "^1.0.1",
+    "fast-glob": "^3.3.3",
+    "gray-matter": "^4.0.3",
+    "simple-git-hooks": "^2.13.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.1.3"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm i --frozen-lockfile --ignore-scripts --offline && npx lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
+  }
+}
