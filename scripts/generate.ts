@@ -17,14 +17,17 @@ export function extractBlocks(md: string): { firstCode: string[], description: s
     const fullMatch = firstMatch[0]
     const content = firstMatch[1].trimEnd()
 
-    firstCode = content.split('\n')
+    firstCode = content
+      .split('\n')
+      .map(line =>
+        line.replace(/^( {2})+/g, match => '\t'.repeat(match.length / 2)),
+      )
 
     const remaining = md.slice(firstMatch.index + fullMatch.length)
     description = remaining
   }
 
   description = description.replace(/^---$/m, '').trim()
-
   description = description.trim()
 
   return { firstCode, description }

@@ -78,4 +78,54 @@ This code defines two constants.
     expect(result.firstCode).toEqual([])
     expect(result.description).toBe('This is a snippet with no code block.')
   })
+
+  it('converts 2-space indentation to tabs in the code block', () => {
+    const md = `
+\`\`\`ts
+@Component({
+  selector: '\${1:selector}',
+  templateUrl: '\${2:template}.html',
+})
+export class \${3:ClassName} {}
+\`\`\`
+
+An Angular component snippet.
+    `.trim()
+
+    const result = extractBlocks(md)
+
+    expect(result.firstCode).toEqual([
+      '@Component({',
+      '\tselector: \'${1:selector}\',',
+      '\ttemplateUrl: \'${2:template}.html\',',
+      '})',
+      'export class ${3:ClassName} {}',
+    ])
+    expect(result.description).toBe('An Angular component snippet.')
+  })
+
+  it('converts 4-space indentation to two tabs in the code block', () => {
+    const md = `
+\`\`\`ts
+function test() {
+    if (true) {
+      console.log('deeply indented')
+    }
+}
+\`\`\`
+
+A function with nested indentation.
+    `.trim()
+
+    const result = extractBlocks(md)
+
+    expect(result.firstCode).toEqual([
+      'function test() {',
+      '\t\tif (true) {',
+      '\t\t\tconsole.log(\'deeply indented\')',
+      '\t\t}',
+      '}',
+    ])
+    expect(result.description).toBe('A function with nested indentation.')
+  })
 })
