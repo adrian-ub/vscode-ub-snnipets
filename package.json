@@ -61,6 +61,7 @@
     "fast-glob": "^3.3.3",
     "gray-matter": "^4.0.3",
     "simple-git-hooks": "^2.13.0",
+    "tinyexec": "^1.0.1",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",

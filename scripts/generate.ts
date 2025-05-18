@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import fg from 'fast-glob'
 import matter from 'gray-matter'
+import { x } from 'tinyexec'
 
 export function extractBlocks(md: string): { firstCode: string[], description: string } {
   const codeBlockRegex = /```[a-z]*\n([\s\S]*?)```/
@@ -87,6 +88,8 @@ ${tableRows.join('\n')}
     const regex = new RegExp(`(${startTag})([\\s\\S]*?)(${endTag})`)
     readmeContent = readmeContent.replace(regex, `$1\n${table}\n$3`)
     fs.writeFileSync(readmePath, readmeContent)
+
+    await x('eslint', [readmePath, '--fix'])
   }
 }
 

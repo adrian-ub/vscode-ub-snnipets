@@ -12,9 +12,9 @@ This extension contains code snippets for  <a href="https://code.visualstudio.co
 
 <!-- SNIPPETS-START -->
 
-| Trigger  | Content |
-| -------: | ------- |
-| `imp→` | imports entire module `import fs from 'fs'` |
+| Trigger | Content                                     |
+| ------: | ------------------------------------------- |
+|  `imp→` | imports entire module `import fs from 'fs'` |
 
 <!-- SNIPPETS-END -->
 
