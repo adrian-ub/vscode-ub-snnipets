@@ -87,16 +87,55 @@ async function main() {
   const startTag = '<!-- SNIPPETS-START -->'
   const endTag = '<!-- SNIPPETS-END -->'
 
-  const table = `\n| Trigger  | Content |
-| -------: | ------- |
-${tableRows.join('\n')}
-`
+  const groupedTables = new Map<string, string[]>()
+
+  for (const file of files) {
+    const raw = fs.readFileSync(file, 'utf8')
+    const { data, content } = matter(raw)
+
+    const prefixes = data.prefixes
+    const scopes = data.scopes
+
+    if (!prefixes || !Array.isArray(prefixes))
+      continue
+    if (!scopes || !Array.isArray(scopes))
+      continue
+
+    const { firstCode, description } = extractBlocks(content)
+    if (!firstCode.length)
+      continue
+
+    const relPath = path.relative(snippetsRoute, file)
+    const parts = relPath.split(path.sep)
+    const baseName = path.parse(parts.pop()!).name
+    const group = parts.join('/') || 'root'
+    const snippetName = [...parts, baseName].join('-')
+
+    snippets[snippetName] = {
+      prefix: prefixes,
+      body: firstCode,
+      description: description.trim(),
+      scope: scopes.join(','),
+    }
+
+    const triggerDisplay = prefixes.map((p: string) => `\`${p}→\``).join(', ')
+    const descFirstLine = description.trim().split('\n')[0] || ''
+    const row = `| ${triggerDisplay} | ${descFirstLine} |`
+
+    if (!groupedTables.has(group))
+      groupedTables.set(group, [])
+    groupedTables.get(group)!.push(row)
+  }
+
+  let finalTable = ''
+  for (const [group, rows] of groupedTables) {
+    finalTable += `\n### ${group}\n\n| Trigger  | Content |\n| -------: | ------- |\n${rows.join('\n')}\n`
+  }
 
   if (readmeContent.includes(startTag) && readmeContent.includes(endTag)) {
     const regex = new RegExp(`(${startTag})([\\s\\S]*?)(${endTag})`)
-    readmeContent = readmeContent.replace(regex, `$1\n${table}\n$3`)
+    readmeContent = readmeContent.replace(regex, `$1\n${finalTable}\n$3`)
     fs.writeFileSync(readmePath, readmeContent)
-
     await x('eslint', [readmePath, '--fix'])
   }
 }
