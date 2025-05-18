@@ -15,6 +15,9 @@
   "bugs": {
     "url": "https://github.com/adrian-ub/vscode-ub-snippets/issues"
   },
+  "sponsor": {
+    "url": "https://github.com/sponsors/adrian-ub"
+  },
   "keywords": [
     "javascript snippets",
     "html snippets",
