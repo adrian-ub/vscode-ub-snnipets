@@ -12,9 +12,13 @@ This extension contains code snippets for  <a href="https://code.visualstudio.co
 
 <!-- SNIPPETS-START -->
 
-| Trigger | Content                                     |
-| ------: | ------------------------------------------- |
-|  `imp→` | imports entire module `import fs from 'fs'` |
+| Trigger | Content                                                                                    |
+| ------: | ------------------------------------------------------------------------------------------ |
+|  `ima→` | imports only a portion of the module as alias `import { rename as localRename } from 'fs'` |
+|  `imd→` | imports only a portion of the module using destructing `import {rename} from 'fs'`         |
+|  `ime→` | imports everything as alias from the module `import * as localAlias from 'fs'`             |
+|  `imn→` | imports entire module without module name `import 'uno.css'`                               |
+|  `imp→` | imports entire module `import fs from 'fs'`                                                |
 
 <!-- SNIPPETS-END -->
 
